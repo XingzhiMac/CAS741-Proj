@@ -1,2 +1,2 @@
 # CAS741-Proj
- Project for XAS 741
+ Project for CAS 741
