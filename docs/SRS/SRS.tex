@@ -1671,7 +1671,7 @@ are regular and easy to integrate into the 2-D system.
 
 \noindent \begin{itemize}
 
-\item[LC\refstepcounter{lcnum}\thelcnum\label{WallsHaveLength}:]  The assumption 
+\item[UC1:]  The assumption 
 that walls have positive lengths (\aref{notZero}) is unlikely to change because 
 a wall with zero or negative length is meaningless both for analysis and in the 
 real world.
@@ -1686,7 +1686,7 @@ component is changed, the items in the column of that component that are marked
 with an ``X'' may have to be modified as well.  Table~\ref{Table:trace} shows the
 dependencies of theoretical models, general definitions, data definitions, and
 instance models with each other. Table~\ref{Table:R_trace} shows the
-dependencies of instance models, requirements, and data constraints on each
+dependencies of instance models and requirements on each
 other. Table~\ref{Table:A_trace} shows the dependencies of theoretical models,
 general definitions, data definitions, instance models, and likely changes on
 the assumptions.
@@ -1789,15 +1789,6 @@ the assumptions.
 \label{Table:R_trace}
 \end{table}
 
-The purpose of the traceability graphs is also to provide easy references on
-what has to be additionally modified if a certain component is changed.  The
-arrows in the graphs represent dependencies. The component at the tail of an
-arrow is depended on by the component at the head of that arrow. Therefore, if a
-component is changed, the components that it points to should also be
-changed. Figure~\ref{Fig_ATrace} shows the dependencies of theoretical models,
-general definitions, data definitions, instance models, likely changes, and
-assumptions on each other. Figure~\ref{Fig_RTrace} shows the dependencies of
-instance models, requirements, and data constraints on each other.
 
 % \begin{figure}[h!]
 % 	\begin{center}
