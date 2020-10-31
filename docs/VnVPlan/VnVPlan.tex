@@ -1,0 +1,656 @@
+\documentclass[12pt, titlepage]{article}
+
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{tabularx}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks,
+    citecolor=blue,
+    filecolor=black,
+    linkcolor=red,
+    urlcolor=blue
+}
+\usepackage[round]{natbib}
+
+\input{../Comments}
+\input{../Common}
+
+\begin{document}
+
+\title{Project Title: System Verification and Validation Plan for Radio Signal Strength Calculator} 
+\author{Xingzhi Liu}
+\date{\today}
+	
+\maketitle
+
+\pagenumbering{roman}
+
+\section{Revision History}
+
+\begin{tabularx}{\textwidth}{p{3cm}p{2cm}X}
+\toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
+\midrule
+Oct 30, 2020 & 1.0 & First Draft of VnV Plan\\
+\bottomrule
+\end{tabularx}
+
+\newpage
+
+\tableofcontents
+
+\listoftables
+
+\listoffigures
+
+\newpage
+
+\section{Symbols, Abbreviations and Acronyms}
+
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{l l} 
+  \toprule		
+  \textbf{symbol} & \textbf{description}\\
+  \midrule 
+  FR & Functional Requirement\\
+  MG & Module Guide\\
+  MIS & Module Interface Specification\\
+  NFR & Non-Functional Requirement\\
+  RSSC & Sadio SignalStrength Calculator\\
+  SRS & Software Requirement Specification\\
+  T & Test\\
+  VV & Validation and Verification\\
+  \bottomrule
+\end{tabular}\\
+
+\newpage
+
+\pagenumbering{arabic}
+
+This document records and presents the verification and validation plan for RSSC
+to help ensure the program meets the requirements. General information including
+a quick recall of RSSC's background is given in \autoref{GeneralInfo}. 
+\autoref{plan} provides a plan for verification and \autoref{systd} describes 
+the system tests, including tests for functional requirements and tests for non-
+functional requirements.
+
+
+\section{General Information}
+\label{GeneralInfo}
+
+\subsection{Summary}
+
+The software to test is Radio Signal Strength Calculator (RSSC). The purpose of
+RSSC is to simulate the radio signal propagation in the indoor environment defined
+by the user, and find the analytical signal strength for the user. 
+
+\subsection{Objectives}
+
+The objective of this document is to build confidence in the software correctness.
+To reach this objective, all functional and non-functional requirements will be
+tested following the descriptions in this document. 
+
+\subsection{Relevant Documentation}
+
+\begin{itemize}
+	\item 
+	\href{https://github.com/XingzhiMac/CAS741-Proj/blob/master/docs/SRS/SRS.pdf}
+	{SRS} 
+\end{itemize}
+
+\section{Plan}\label{plan}
+	
+\subsection{Verification and Validation Team}
+
+\begin{itemize}
+	\item Author: Xingzhi Liu
+\end{itemize}
+
+\begin{itemize}
+	\item Primary Reviewer: Siddharth (Sid) Shinde
+\end{itemize}
+
+\begin{itemize}
+	\item Reviewer: Leila Mousapour
+\end{itemize}
+
+\begin{itemize}
+	\item Reviewer: Shayan Mousavi Masouleh
+\end{itemize}
+
+\begin{itemize}
+	\item Dr. Spencer Smith
+\end{itemize}
+
+\subsection{SRS Verification Plan}
+
+SRS will be done by team members reviewing the document. Team members can put
+any comments, suggestions or questions in RSSC's Github repository as issues.
+The author will respond to the issues and make modifications when needed.
+
+\subsection{Design Verification Plan}
+
+Design verification will be done by team members, by reviewing whether the steps 
+of calculation in the software follows the physical model in SRS or not. 
+
+\subsection{Implementation Verification Plan}
+
+Implementation verification will be done by testing all the functional and non-
+functional requirements. Descriptions of the tests can be found in \autoref{tfr} and \autoref{tnfr}. In addition, we will undergo static verification by checking
+all the codes we build with Pylint. We will also conduct unit testing for modules
+within the testing scope. Details for unit testing can be found in \autoref{unittest}.
+
+
+\subsection{Automated Testing and Verification Tools}
+\begin{itemize}
+	\item Python Unittest
+\end{itemize}
+\begin{itemize}
+	\item Pylint
+\end{itemize}
+\wss{The details of this section will likely evolve as you get closer to the
+  implementation.}
+
+\subsection{Software Validation Plan}
+
+There are no plans for validation. We may be able to set up a simulation of radio
+frequency signal on existing physics simulation tools and take the simulation 
+result as a reference to evaluate RSSC's output, but different tools makes 
+different assumptions to the indoor signal propagation model and we cannot 
+change their assumptions. It is highly unlikely that we could find a tool 
+that makes the same assumptions as RSSC. Therefore we do not have any reference 
+to evaluate RSSC's correctness.
+
+
+\section{System Test Description}
+\label{systd}
+	
+\subsection{Tests for Functional Requirements}
+\label{tfr}
+
+Functional requirements for RSSC are given in 
+\href{https://github.com/XingzhiMac/CAS741-Proj/blob/master/docs/SRS/SRS.pdf}
+{SRS} section 5.1. There are 5 functional requirements for RSSC, from R1 to R5.
+R1 and R2 are corresponding to inputs, while R3 to R5 are corresponding to outputs.
+\autoref{area1} describes the input tests for R1 and R2; and \autoref{area2} 
+describes the output tests for R3, R4 and R5.
+
+\subsubsection{Area of Testing1 - Input}\label{Ainput}
+\label{area1}
+
+This test verifies the following requirements: \\
+\indent  R1: RSSC takes input from the user;\\
+\indent  R2: RSSC verifies user inputs.\\
+		
+\paragraph{Input Tests}
+
+\begin{enumerate}
+
+\item{Valid inputs\\}
+
+Control: Manual
+					
+Initial State: Pending Input
+					
+Input:
+$Pos_{tsm} = [0,0];$\\
+$[Pos_{sp}] = [[10,0],[-10,0]];$\\
+$[C] = [[1,1],[2,2],[1,3]];$\\
+$[D] = [[2,2],[1,3],[1,1]];$\\
+$[T] = [0.1,0.1,0.1];$\\
+$[R] = [0.6,0.6,0.6];$\\
+$P_{tsm}^{dBm} = 0;$\\
+$f = 2.48\times10^{9};$\\
+
+Output: Return an input success message in command line.
+
+Test Case Derivation: RSSC correctly takes the inputs from the user
+					
+How test will be performed: Tester manually feeds the inputs into
+RSSC and executes RSSC.
+					
+					
+\item{Inconsistent input array sizes\\}
+
+Control: Manual
+					
+Initial State: Pending Input
+					
+Input: 
+$Pos_{tsm} = [0,0];$\\
+$[Pos_{sp}] = [[10,0],[-10,0]];$\\
+$[C] = [[1,1],[2,2],[1,3]];$\\
+$[D] = [[2,2],[1,3]];$\\
+$[T] = [0.1,0.1,0.1];$\\
+$[R] = [0.6,0.6,0.6];$\\
+$P_{tsm}^{dBm} = 0;$\\
+$f = 2.48\times10^{9};$\\
+					
+Output: Return error of inconsistent array size in command line.
+
+Test Case Derivation: Correct error message displays.
+
+How test will be performed: Tester manually feeds the inputs into
+RSSC and executes RSSC.
+
+
+\item{Out-of-range position coordinates\\}
+
+Control: Manual
+					
+Initial State: Pending Input
+					
+Input:
+$Pos_{tsm} = [21,0];$\\
+$[Pos_{sp}] = [[10,0],[-10,0]];$\\
+$[C] = [[1,1],[2,2],[1,3]];$\\
+$[D] = [[2,2],[1,3],[1,1]];$\\
+$[T] = [0.1,0.1,0.1];$\\
+$[R] = [0.6,0.6,0.6];$\\
+$P_{tsm}^{dBm} = 0;$\\
+$f = 2.48\times10^{9};$\\
+
+Output: Return error of out-of-range position coordinates.
+
+Test Case Derivation: Correct error message displays.
+					
+How test will be performed: Tester manually feeds the inputs into
+RSSC and executes RSSC.
+
+
+\item{Out-of-range transmitter power level\\}
+
+Control: Manual
+					
+Initial State: Pending Input
+					
+Input:
+$Pos_{tsm} = [0,0];$\\
+$[Pos_{sp}] = [[10,0],[-10,0]];$\\
+$[C] = [[1,1],[2,2],[1,3]];$\\
+$[D] = [[2,2],[1,3],[1,1]];$\\
+$[T] = [0.1,0.1,0.1];$\\
+$[R] = [0.6,0.6,0.6];$\\
+$P_{tsm}^{dBm} = 20;$\\
+$f = 2.48\times10^{9};$\\
+
+Output: Return error of out-of-range transmitter power level.
+
+Test Case Derivation: Correct error message displays.
+					
+How test will be performed: Tester manually feeds the inputs into
+RSSC and executes RSSC.
+
+
+\item{Out-of-range signal frequency\\}
+
+Control: Manual
+					
+Initial State: Pending Input
+					
+Input:
+$Pos_{tsm} = [0,0];$\\
+$[Pos_{sp}] = [[10,0],[-10,0]];$\\
+$[C] = [[1,1],[2,2],[1,3]];$\\
+$[D] = [[2,2],[1,3],[1,1]];$\\
+$[T] = [0.1,0.1,0.1];$\\
+$[R] = [0.6,0.6,0.6];$\\
+$P_{tsm}^{dBm} = 20;$\\
+$f = 2.48\times10^{12};$\\
+
+Output: Return error of out-of-range signal frequency.
+
+Test Case Derivation: Correct error message displays.
+					
+How test will be performed: Tester manually feeds the inputs into
+RSSC and executes RSSC.
+
+\wxz{TODO - learn how to write automatic testing scripts to generate random valid input
+sets and feed into RSSC.}
+\end{enumerate}
+
+\subsubsection{Area of Testing2 - Output}\label{Aoutput}
+\label{area2}
+
+This test verifies the following requirements: \\
+\indent  R3: RSSC shall find $P_{sp}^{dBm}$;\\
+\indent  R4: RSSC shall verify $P_{sp}^{dBm}$;\\
+\indent  R5: RSSC shall generate a file to store $P_{sp}^{dBm}$;\\
+
+\paragraph{Output Test}
+
+\begin{enumerate}
+
+\item{Simple single valid output\\}
+
+Control: Manual
+					
+Initial State: Pending Input
+					
+Input:
+$Pos_{tsm} = [0,0];$\\
+$[Pos_{sp}] = [[1,0]];$\\
+$[C] = [ ];$\\
+$[D] = [ ];$\\
+$[T] = [ ];$\\
+$[R] = [ ];$\\
+$P_{tsm}^{dBm} = 0;$\\
+$f = 2.48\times10^{9};$\\
+
+Output: A .txt or .csv file with 1 line, showing the sampling point
+position (1,0) and $P_{sp}^{dBm}$ that satisfies $P_{sp}^{dBm} 
+\leq 0$. 
+
+Test Case Derivation: RSSC returns the correct output.
+					
+How test will be performed: Tester manually feeds the inputs into
+RSSC and executes RSSC.
+					
+
+\item{Simple multiple valid output\\}
+
+Control: Manual
+					
+Initial State: Pending Input
+					
+Input:
+$Pos_{tsm} = [0,0];$\\
+$[Pos_{sp}] = [[1,0],[1,1]];$\\
+$[C] = [ ];$\\
+$[D] = [ ];$\\
+$[T] = [ ];$\\
+$[R] = [ ];$\\
+$P_{tsm}^{dBm} = 0;$\\
+$f = 2.48\times10^{9};$\\
+
+Output: A .txt or .csv file with 2 lines. Line 1 shows the sampling point
+position (1,0) and $P_{sp}^{dBm}$ that satisfies $P_{sp}^{dBm} 
+\leq 0$. Line 2 shows the sampling point position (1,1) and $P_{sp}^{dBm}$ 
+that satisfies $P_{sp}^{dBm} \leq 0$. 
+
+Test Case Derivation: RSSC returns the correct output.
+					
+How test will be performed: Tester manually feeds the inputs into
+RSSC and executes RSSC.
+\wxz{TODO - learn how to write automatic testing scripts to generate random 
+valid input sets and feed into RSSC.}
+
+\end{enumerate}
+
+\subsection{Tests for Non-Functional Requirements}
+\label{tnfr}
+
+Non-functional requirements are given in SRS section 5.2. There are 5 non-
+functional requirements: Portable, Maintainable, and Understandable. The 
+rest of this section provides detailed descriptions on how to test them.
+
+\subsubsection{Portable}\label{Aport}
+
+\paragraph{Portability Test} RSSC shall be able to run on different OS. 
+We will test execute RSSC on both Windows and Linux Ubuntu.
+
+\begin{enumerate}
+
+\item{Portability on Windows 10\\}
+
+Type: Manual
+					
+Initial State: Pending Input
+					
+Input: $Pos_{tsm} = [0,0];$\\
+$[Pos_{sp}] = [[1,0]];$\\
+$[C] = [ ];$\\
+$[D] = [ ];$\\
+$[T] = [ ];$\\
+$[R] = [ ];$\\
+$P_{tsm}^{dBm} = 0;$\\
+$f = 2.48\times10^{9};$\\
+					
+Output: A .txt or .csv file with 1 line, showing the sampling point
+position (1,0) and $P_{sp}^{dBm}$ that satisfies $P_{sp}^{dBm} 
+\leq 0$. 
+					
+How test will be performed: Tester deploys RSSC on a machine with Windows 
+10 OS and execute with the input set above. On success, RSSC should
+provide the output as described.
+
+
+\item{Portability on Linux Ubuntu\\}
+
+Type: Manual
+					
+Initial State: Pending Input
+					
+Input: $Pos_{tsm} = [0,0];$\\
+$[Pos_{sp}] = [[1,0]];$\\
+$[C] = [ ];$\\
+$[D] = [ ];$\\
+$[T] = [ ];$\\
+$[R] = [ ];$\\
+$P_{tsm}^{dBm} = 0;$\\
+$f = 2.48\times10^{9};$\\
+					
+Output: A .txt or .csv file with 1 line, showing the sampling point
+position (1,0) and $P_{sp}^{dBm}$ that satisfies $P_{sp}^{dBm} 
+\leq 0$. 
+					
+How test will be performed: Tester deploys RSSC on a virtual machine 
+with Ubuntu 20.04 and execute with the input set above. On success, 
+RSSC should provide the output as described.
+
+\end{enumerate}
+
+\subsubsection{Maintainable}\label{Amaintain}
+
+\paragraph{Maintainability Test} Proper documents should be included
+in this project. 
+
+\begin{enumerate}
+\item{Maintainability Test\\}
+
+Type: Manual
+					
+Initial State: none
+					
+Input: none
+					
+Output: none
+					
+How test will be performed: Tester manually checks the contents in the
+Github repo. On success, documents shall be uploaded following the schedule
+of CAS741 and no issue shall be closed without a proper response.
+
+\end{enumerate}
+
+\subsubsection{Understandable}\label{Audst}
+
+\paragraph{Understandability Test} Programs of RSSC should be organized,
+well commented, and easy to understand.
+
+\begin{enumerate}
+\item{Understandability Test\\}
+
+Type: Manual
+					
+Initial State: none
+					
+Input: none
+					
+Output: none
+					
+How test will be performed: Tester review the code and complete the survey
+shown in \autoref{ut}.
+
+\end{enumerate}
+
+\begin{longtable}[h]{l l}
+\label{ut}
+	\begin{tabular}{l l} 
+	\toprule		
+	\textbf{Item} & \textbf{Score}\\
+	\midrule 
+	Variable names are rational and follow consistent conventions & \{0 - 5\}\\
+	Functions are well commented on what they do & \{0 - 5\} \\
+	Functions tasks are broken down / No super complicated functions & \{0 - 5\} \\
+	No repeated chunks in the code & \{0 - 5\} \\
+	Code is well organized and follows the order of instance models & \{0 - 5\} \\
+	\bottomrule
+	\caption{Understandability Survey} \label{Undgradesheet} \\
+\end{tabular}\\
+\end{longtable}
+
+\subsection{Traceability Between Test Cases and Requirements}
+
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+		\hline
+		& R1 & R2 & R3 & R4 & R5 & Portable & Maintainable & Understandable\\
+		\hline
+		\ref{Ainput}    &X&X& & & & & & \\ \hline
+		\ref{Aoutput}   & & &X&X&X& & & \\ \hline
+		\ref{Aport}     & & & & & &X& & \\ \hline
+		\ref{Amaintain} & & & & & & &X& \\ \hline
+		\ref{Audst}     & & & & & & & &X\\ \hline
+	\end{tabular}
+	\caption{Traceability Between Test Cases and Requirements}
+	\label{Table:A_trace}
+\end{table}
+
+\section{Unit Test Description}
+\label{unittest}
+
+\wss{Reference your MIS and explain your overall philosophy for test case
+  selection.}  
+\wss{This section should not be filled in until after the MIS has
+  been completed.}
+
+\subsection{Unit Testing Scope}
+
+\wss{What modules are outside of the scope.  If there are modules that are
+  developed by someone else, then you would say here if you aren't planning on
+  verifying them.  There may also be modules that are part of your software, but
+  have a lower priority for verification than others.  If this is the case,
+  explain your rationale for the ranking of module importance.}
+
+\subsection{Tests for Functional Requirements}
+
+\wss{Most of the verification will be through automated unit testing.  If
+  appropriate specific modules can be verified by a non-testing based
+  technique.  That can also be documented in this section.}
+
+\subsubsection{Module 1}
+
+\wss{Include a blurb here to explain why the subsections below cover the module.
+  References to the MIS would be good.  You will want tests from a black box
+  perspective and from a white box perspective.  Explain to the reader how the
+  tests were selected.}
+
+\begin{enumerate}
+
+\item{test-id1\\}
+
+Type: \wss{Functional, Dynamic, Manual, Automatic, Static etc. Most will
+  be automatic}
+					
+Initial State: 
+					
+Input: 
+					
+Output: \wss{The expected result for the given inputs}
+
+Test Case Derivation: \wss{Justify the expected value given in the Output field}
+
+How test will be performed: 
+					
+\item{test-id2\\}
+
+Type: \wss{Functional, Dynamic, Manual, Automatic, Static etc. Most will
+  be automatic}
+					
+Initial State: 
+					
+Input: 
+					
+Output: \wss{The expected result for the given inputs}
+
+Test Case Derivation: \wss{Justify the expected value given in the Output field}
+
+How test will be performed: 
+
+\item{...\\}
+    
+\end{enumerate}
+
+\subsubsection{Module 2}
+
+...
+
+\subsection{Tests for Nonfunctional Requirements}
+
+\wss{If there is a module that needs to be independently assessed for
+  performance, those test cases can go here.  In some projects, planning for
+  nonfunctional tests of units will not be that relevant.}
+
+\wss{These tests may involve collecting performance data from previously
+  mentioned functional tests.}
+
+\subsubsection{Module ?}
+		
+\begin{enumerate}
+
+\item{test-id1\\}
+
+Type: \wss{Functional, Dynamic, Manual, Automatic, Static etc. Most will
+  be automatic}
+					
+Initial State: 
+					
+Input/Condition: 
+					
+Output/Result: 
+					
+How test will be performed: 
+					
+\item{test-id2\\}
+
+Type: Functional, Dynamic, Manual, Static etc.
+					
+Initial State: 
+					
+Input: 
+					
+Output: 
+					
+How test will be performed: 
+
+\end{enumerate}
+
+\subsubsection{Module ?}
+
+...
+
+\subsection{Traceability Between Test Cases and Modules}
+
+\wss{Provide evidence that all of the modules have been considered.}
+				
+\bibliographystyle{plainnat}
+
+\bibliography{../../refs/References}
+
+\newpage
+
+\section{Appendix}
+
+This is where you can place additional information.
+
+\subsection{Symbolic Parameters}
+
+The definition of the test cases will call for SYMBOLIC\_CONSTANTS.
+Their values are defined in this section for easy maintenance.
+
+\subsection{Usability Survey Questions?}
+
+\wss{This is a section that would be appropriate for some projects.}
+
+\end{document}
