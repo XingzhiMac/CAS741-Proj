@@ -1,0 +1,1423 @@
+\documentclass[12pt, titlepage]{article}
+
+\usepackage{amsmath, mathtools}
+
+\usepackage[round]{natbib}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{colortbl}
+\usepackage{xr}
+\usepackage{hyperref}
+\usepackage{longtable}
+\usepackage{xfrac}
+\usepackage{tabularx}
+\usepackage{float}
+\usepackage{siunitx}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage[section]{placeins}
+\usepackage{caption}
+\usepackage{fullpage}
+
+\hypersetup{
+bookmarks=true,     % show bookmarks bar?
+colorlinks=true,       % false: boxed links; true: colored links
+linkcolor=red,          % color of internal links (change box color with linkbordercolor)
+citecolor=blue,      % color of links to bibliography
+filecolor=magenta,  % color of file links
+urlcolor=cyan          % color of external links
+}
+
+\usepackage{array}
+
+\externaldocument[SRS-]{../../../SRS/SRS}
+
+\input{../../Comments}
+\input{../../Common}
+
+\begin{document}
+
+\title{Module Interface Specification for RSSC}
+
+\author{Xingzhi Liu}
+
+\date{\today}
+
+\maketitle
+
+\pagenumbering{roman}
+
+\section{Revision History}
+
+\begin{tabularx}{\textwidth}{p{3cm}p{2cm}X}
+\toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
+\midrule
+Nov. 19, 2020 & 1.0 & Initial Release\\
+\bottomrule
+\end{tabularx}
+
+~\newpage
+
+\section{Symbols, Abbreviations and Acronyms}
+
+See SRS Documentation at \url{https://github.com/XingzhiMac/CAS741-Proj/}
+
+\newpage
+
+\tableofcontents
+
+\newpage
+
+\pagenumbering{arabic}
+
+\section{Introduction}
+
+The following document details the Module Interface Specifications for
+Radio Signal Strength Calculator. It is intended to ease navigation through 
+the program for design and maintenance purposes.
+
+Complementary documents include the System Requirement Specifications
+and Module Guide.  The full documentation and implementation can be
+found at \url{https://github.com/XingzhiMac/CAS741-Proj/}. 
+
+\section{Notation}
+
+The structure of the MIS for modules comes from \citet{HoffmanAndStrooper1995},
+with the addition that template modules have been adapted from
+\cite{GhezziEtAl2003}.  The mathematical notation comes from Chapter 3 of
+\citet{HoffmanAndStrooper1995}.  For instance, the symbol := is used for a
+multiple assignment statement and conditional rules follow the form $(c_1
+\Rightarrow r_1 | c_2 \Rightarrow r_2 | ... | c_n \Rightarrow r_n )$.
+
+The following table summarizes the primitive data types used by RSSC. 
+
+\begin{center}
+\renewcommand{\arraystretch}{1.2}
+\noindent 
+\begin{tabular}{l l p{7.5cm}} 
+\toprule 
+\textbf{Data Type} & \textbf{Notation} & \textbf{Description}\\ 
+\midrule
+Boolean & Boolean & a 1-bit data with two possible values (0 and 1)\\
+character & char & a single symbol or digit\\
+integer & $\mathbb{Z}$ & a number without a fractional component in (-$\infty$, $\infty$) \\
+natural number & $\mathbb{N}$ & a number without a fractional component in [1, $\infty$) \\
+non-negative integer & $\mathbb{N}_0$ & a number without a fractional component in [0, $\infty$) \\
+real & $\mathbb{R}$ & any number in (-$\infty$, $\infty$)\\
+
+\bottomrule
+\end{tabular} 
+\end{center}
+
+\noindent
+The specification of RSSC uses some derived data types: sets, strings, and
+tuples. Sets are lists filled with elements of the same data type. In this document, a set of data in type T is represented as set[T]. Strings are lists of characters. Tuples contain a list of values, potentially of different types.
+
+In addition, RSSC defines the following classes as its unique data types: Point (defined in
+\autoref{pointModule}), Wall (defined in \autoref{wallModule}), FloorMap (defined in \autoref{floorMap}), LinearPath (defined in \autoref{linearPathModule}), LineOfSight (defined in \autoref{losModule}), and FirstOrderReflection (defined in \autoref{forsModule}). 
+
+\section{Module Decomposition}
+
+The following table is taken directly from the Module Guide document for this project.
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{p{0.3\textwidth} p{0.6\textwidth}}
+\toprule
+\textbf{Level 1} & \textbf{Level 2}\\
+\midrule
+
+{Hardware-Hiding} & ~ \\
+\midrule
+
+\multirow{3}{0.3\textwidth}{Behaviour-Hiding} & Input Parameters\\
+& Output\\
+& Control Module\\
+& Received Signal Strength\\
+& Specification Parameters Module\\
+\midrule
+
+\multirow{3}{0.3\textwidth}{Software Decision} & Point\\
+& Wall\\
+& Floor Map\\
+& Equation Finder\\
+& Linear Signal Path\\
+& Intersection\\
+& Linear Path Loss\\
+& Line-Of-Sight Signal\\
+& Specular Reflection\\
+& First Order Reflection Signal\\
+\bottomrule
+
+\end{tabular}
+\caption{Module Hierarchy}
+\label{TblMH}
+\end{table}
+
+\newpage
+~\newpage
+
+\section{MIS of Control Module} \label{controlModule}
+
+\subsection{Module}
+
+main
+
+\subsection{Uses}
+
+Param (\autoref{inputParamModule}), FloorMap(\autoref{floorMap}), ReceivedSignalStrength(\autoref{rssModule}), Output(\autoref{outputModule})
+
+\subsection{Syntax}
+
+\subsubsection{Exported Constants}
+
+\subsubsection{Exported Access Programs}
+
+\begin{center}
+\begin{tabular}{p{2cm} p{4cm} p{4cm} p{2cm}}
+\hline
+\textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
+\hline
+main & - & - & - \\
+\hline
+\end{tabular}
+\end{center}
+
+\subsection{Semantics}
+
+\subsubsection{State Variables}
+
+None
+
+\subsubsection{Access Routine Semantics}
+
+\noindent main():
+\begin{itemize}
+\item transition: Modify the state of Param module and the environment variables for the
+Output module by following these steps:\\
+
+	Get (filenameTSM: string), (filenameSP: string), (filenameWALL: string), and (filenameOut: string) from user\\
+	
+	Param.load\_params(filenameTSM, filenameSP, filenameWALL)\\
+	
+	$map$ = FloorMap.create()\\
+	
+	$[P_{sp}^{dBm}]$ := empty set\\
+	For ($sampling\_point$: Point) in Param.$[Pos_{sp}]$:\\
+	$P_{sp}^{dBm}$ := ReceivedSignalStrength.get\_received\_power($map$, $sampling\_point$)\\
+	Add $P_{sp}^{dBm}$ into the set $[P_{sp}^{dBm}]$\\
+	
+	Output.output(filenameOut, Param.$[Pos_{sp}]$, $[P_{sp}^{dBm}]$)
+\end{itemize}
+
+\newpage
+
+
+\section{MIS of Input Parameters Module} \label{inputParamModule}
+
+\subsection{Module}
+
+Param
+
+\subsection{Uses}
+
+SpecParam (\autoref{specParamModule}), Point (\autoref{pointModule})
+
+\subsection{Syntax}
+
+\subsubsection{Exported Constants}
+
+None
+
+\subsubsection{Exported Access Programs}
+
+\begin{center}
+\begin{tabular}{p{4cm} p{2cm} p{2cm} p{4cm}}
+\hline
+\textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
+\hline
+load\_params & s1: string, s2: string, s3: string & - & FileError \\
+verify\_params & - & - & badTransmittance, badReflectance, badTransmissionPower, badSignalFrequency, badPosition, inconsistentWallParams \\
+$Pos_{tsm}$ & - & Point & - \\
+$[Pos_{sp}]$ & - & set[Point] & - \\
+$[C]$ & - & set[Point] & - \\
+$[D]$ & - & set[Point] & - \\
+$[T]$ & - & set[$\mathbb{R}$] & - \\
+$[R]$ & - & set[$\mathbb{R}$] & - \\
+$P_{tsm}^{dBm}$ & - & $\mathbb{R}$ & - \\
+$f$ & - & $\mathbb{R}$ & - \\
+\hline
+\end{tabular}
+\end{center}
+
+\subsection{Semantics}
+
+\subsubsection{State Variables}
+$Pos_{tsm}$: Point\\
+$[Pos_{sp}]$: set[Point]\\
+$[C]$: set[Point]\\
+$[D]$: set[Point]\\
+$[T]$: set[$\mathbb{R}$]\\
+$[R]$: set[$\mathbb{R}$]\\
+$P_{tsm}^{dBm}$: $\mathbb{R}$\\
+$f$: $\mathbb{R}$\\
+$length_C$: $\mathbb{R}$\\
+$length_D$: $\mathbb{R}$\\
+$length_T$: $\mathbb{R}$\\
+$length_R$: $\mathbb{R}$\\
+\subsubsection{Environment Variables}
+tsmFile: set[string]\\
+spFile: set[string]\\
+wallFile: set[string]\\
+\subsubsection{Assumptions}
+\begin{itemize}
+\item load\_params will be called before any of the state variables be accessed.
+\item tsmFile contains the string equivalents of the numeric values for $Pos_{tsm}$, $P_{tsm}^{dBm}$ and $f$, each on a new line.
+\item spFile contains the string equivalents of elements in the user-input item $[Pos_{sp}]$ , each on a new line, in the form of two numbers separated with a comma.
+\item wallFile contains the string equivalents of elements in the user-input items $[C]$, $[D]$, $[T]$, and $[R]$. Each line is in the form of 6 numbers separated by 5 commas (each line should be “$x_{C_x}, y_{C_x}, x_{D_x}, y_{D_x}, T_x, R_x$”).
+
+\end{itemize}
+
+\subsubsection{Access Routine Semantics}
+
+\noindent Param.$Pos_{tsm}$():
+\begin{itemize}
+\item output: $out := Pos_{tsm}$
+\item exception: none
+\end{itemize}
+
+\noindent Param.$[Pos_{sp}]$():
+\begin{itemize}
+\item output: $out := [Pos_{sp}]$
+\item exception: none
+\end{itemize}
+
+\noindent Param.$[C]$():
+\begin{itemize}
+\item output: $out := [C]$
+\item exception: none
+\end{itemize}
+
+\noindent Param.$[D]$():
+\begin{itemize}
+\item output: $out := [D]$
+\item exception: none
+\end{itemize}
+
+\noindent Param.$[T]$():
+\begin{itemize}
+\item output: $out := [T]$
+\item exception: none
+\end{itemize}
+
+\noindent Param.$[R]$():
+\begin{itemize}
+\item output: $out := [R]$
+\item exception: none
+\end{itemize}
+
+\noindent Param.$P_{tsm}^{dBm}$():
+\begin{itemize}
+\item output: $out := P_{tsm}^{dBm}$
+\item exception: none
+\end{itemize}
+
+\noindent Param.$f$():
+\begin{itemize}
+\item output: $out := f$
+\item exception: none
+\end{itemize}
+
+\noindent Param.$length_C$():
+\begin{itemize}
+\item output: $out$ := number of elements in the user-input item $[C]$
+\item exception: none
+\end{itemize}
+
+\noindent Param.$length_D$():
+\begin{itemize}
+\item output: $out$ := number of elements in the user-input item $[D]$
+\item exception: none
+\end{itemize}
+
+\noindent Param.$length_T$():
+\begin{itemize}
+\item output: $out$ := number of elements in the user-input item $[T]$
+\item exception: none
+\end{itemize}
+
+\noindent Param.$length_R$():
+\begin{itemize}
+\item output: $out$ := number of elements in the user-input item $[R]$
+\item exception: none
+\end{itemize}
+
+\noindent load\_params(s1: string, s2: string, s3: string):
+\begin{itemize}
+\item transition: \\
+The file names s1, s2, and s3 are associated with tsmFile, spFile, and wallsFile respectively.\\
+The state variables are modified with the following procedures:\\
+1. Read data from the three files to populate the state variables from \ref{SRS-R_Inputs} (from $Pos_{tsm}$ to $f$).\\
+2. Store the lengths of $[C], [D], [T], and [R]$ as $length_C, length_D, length_T$, and $length_R$ respectively. \\
+3. verify\_params()\\
+\item exception: $exc$ := any of the file names (s1, s2, or s3) cannot be found OR of any file's format (tsmFile, spFile, or wallsFile) is incorrect $\Rightarrow$ FileError
+\end{itemize}
+
+\noindent verify\_params():
+\begin{itemize}
+\item output: $out$ := none
+\item exception: $exc$ := \\
+$\neg(T_{min} \leq T_x \leq T_{max}$ $\forall$ $T_x \in [T]) \Rightarrow$ badTransmittance\\
+$\neg(R_{min} \leq R_x \leq R_{max}$ $\forall$ $R_x \in [R]) \Rightarrow$ badReflectance\\
+$\neg(P_{min}^{dBm} \leq P_{tsm}^{dBm} \leq P_{max}^{dBm}) \Rightarrow$ badTransmissionPower\\
+$\neg(f_{min} \leq f \leq f_{max}) \Rightarrow$ badSignalFrequency\\
+$\neg(x_{min} \leq x_{C_x} \leq x_{max}$ $\forall$ $C_x \in [C]) \Rightarrow$ badPosition\\
+$\neg(y_{min} \leq y_{C_x} \leq y_{max}$ $\forall$ $C_x \in [C]) \Rightarrow$ badPosition\\
+$\neg(x_{min} \leq x_{D_x} \leq x_{max}$ $\forall$ $D_x \in [D]) \Rightarrow$ badPosition\\
+$\neg(y_{min} \leq y_{D_x} \leq y_{max}$ $\forall$ $D_x \in [D]) \Rightarrow$ badPosition\\
+$\neg(length_C = length_D = length_T = length_R) \Rightarrow$ inconsistentWallParams\\
+\end{itemize}
+
+\subsubsection{Local Functions} None
+
+
+
+\newpage
+\section{MIS of Point Module} \label{pointModule}
+
+\subsection{Module}
+
+Point
+
+\subsection{Uses}
+
+None
+
+\subsection{Syntax}
+
+\subsubsection{Exported Constants}
+
+None
+
+\subsubsection{Exported Access Programs}
+
+\begin{center}
+\begin{tabular}{p{4cm} p{3cm} p{2cm} p{4cm}}
+\hline
+\textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
+\hline
+create & x\_coordinate: $\mathbb{R}$, y\_coordinate: $\mathbb{R}$ & Point & - \\
+set\_coordinates & x\_coordinate: $\mathbb{R}$, y\_coordinate: $\mathbb{R}$ & - & - \\
+get\_coordinates & - & $x: \mathbb{R}, y: \mathbb{R}$ & - \\
+\hline
+\end{tabular}
+\end{center}
+
+\subsection{Semantics}
+
+\subsubsection{State Variables}
+$x: \mathbb{R}$\\
+$y: \mathbb{R}$
+\subsubsection{Environment Variables} None
+
+\subsubsection{Assumptions} None
+
+\subsubsection{Access Routine Semantics}
+
+\noindent create(x\_coordinate: $\mathbb{R}$, y\_coordinate: $\mathbb{R}$):
+\begin{itemize}
+\item transition: \\
+$x$ := x\_coordinate\\
+$y$ := y\_coordinate
+\item output: $out$ := self
+\end{itemize}
+
+\noindent set\_coordinates(x\_coordinate: $\mathbb{R}$, y\_coordinate: $\mathbb{R}$):
+\begin{itemize}
+\item transition: \\
+$x$ := x\_coordinate\\
+$y$ := y\_coordinate
+\item output: none
+\end{itemize}
+
+\noindent get\_coordinates():
+\begin{itemize}
+\item output: $out := x,y$
+\end{itemize}
+
+\subsubsection{Local Functions}
+None
+
+\newpage
+\section{MIS of Wall Module} \label{wallModule}
+
+\subsection{Module}
+
+Wall
+
+\subsection{Uses}
+
+Point (\autoref{pointModule}), EquationFinder (\autoref{equationFinder})
+
+\subsection{Syntax}
+
+\subsubsection{Exported Constants}
+
+None
+
+\subsubsection{Exported Access Programs}
+
+\begin{center}
+\begin{tabular}{p{4cm} p{2.3cm} p{3cm} p{3cm}}
+\hline
+\textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
+\hline
+create & start: Point, end: Point & Wall & invalidWall \\
+set\_start\_point & Point & - & invalidWall \\
+set\_end\_point & Point & - & invalidWall \\
+get\_start\_point & - & Point & - \\
+get\_end\_point & - & Point & - \\
+set\_transmittance & $\mathbb{R}$ & - & - \\
+set\_reflectance & $\mathbb{R}$ & - & - \\
+get\_transmittance & - & $\mathbb{R}$ & - \\
+get\_reflectance & - & $\mathbb{R}$ & - \\
+get\_unit\_normal & - & $n1: \mathbb{R}$,  $n2: \mathbb{R}$ & - \\
+get\_line\_equation & - & $m1: \mathbb{R}$, $m2: \mathbb{R}$, $k: \mathbb{R}$ & - \\
+\hline
+\end{tabular}
+\end{center}
+
+\subsection{Semantics}
+
+\subsubsection{State Variables}
+$C_x:$ Point\\
+$D_x:$ Point\\
+$T_x: \mathbb{R}$\\
+$R_x: \mathbb{R}$\\
+$m1: \mathbb{R}$\\
+$m2: \mathbb{R}$\\
+$k: \mathbb{R}$\\
+$n1: \mathbb{R}$\\
+$n2: \mathbb{R}$
+
+\subsubsection{Environment Variables} None
+
+\subsubsection{Assumptions} None
+
+\subsubsection{Access Routine Semantics}
+
+\noindent create(start: Point, end: Point, transmittance: $\mathbb{R}$, reflectance: $\mathbb{R}$):
+\begin{itemize}
+\item transition: \\
+$C_x$ := start\\
+$D_x$ := end\\
+$T_x$ := transmittance\\
+$R_x$ := reflectance\\
+
+Use Equation Finder Module to find equation parameters:\\
+$m1, m2, k$ := EquationFinder.find\_equation(start, end)\\
+
+Find the unit normal vector:\\
+$n1, n2$ := find\_unit\_normal($C_x, D_x$)\\
+\item output: $out$ := self
+\item exception: $exc$ := $C_x$ and $D_x$ have the same coordinates $\Rightarrow$ invalidWall
+\end{itemize}
+
+\noindent set\_start\_point(start: Point):
+\begin{itemize}
+\item transition: \\
+$C_x$ := start\\
+
+Use Equation Finder Module to find equation parameters:\\
+$m1, m2, k$ := EquationFinder.find\_equation($C_x$, $D_x$)\\
+
+Find the unit normal vector:\\
+$n1, n2$ := find\_unit\_normal($C_x, D_x$)\\
+\item output: none
+\item exception: $exc$ := $C_x$ and $D_x$ have the same coordinates $\Rightarrow$ invalidWall
+\end{itemize}
+
+\noindent set\_end\_point(end: Point):
+\begin{itemize}
+\item transition: \\
+$D_x$ := end\\
+
+Use Equation Finder Module to find equation parameters:\\
+$m1, m2, k$ := EquationFinder.find\_equation($C_x$, $D_x$)\\
+
+Find the unit normal vector:\\
+$n1, n2$ := find\_unit\_normal($C_x, D_x$)\\
+\item output: none
+\item exception: $exc$ := $C_x$ and $D_x$ have the same coordinates $\Rightarrow$ invalidWall
+\end{itemize}
+
+\noindent get\_start\_point():
+\begin{itemize}
+\item output: $out$ := $C_x$
+\item exception: none
+\end{itemize}
+
+\noindent get\_end\_point():
+\begin{itemize}
+\item output: $out$ := $D_x$
+\item exception: none
+\end{itemize}
+
+\noindent set\_transmittance(transmittance: $\mathbb{R}$):
+\begin{itemize}
+\item transition: $T_x$ := transmittance
+\item output: none
+\item exception: none
+\end{itemize}
+
+\noindent set\_reflectance(resistance: $\mathbb{R}$):
+\begin{itemize}
+\item transition: $R_x$ := resistance
+\item output: none
+\item exception: none
+\end{itemize}
+
+\noindent get\_transmittance():
+\begin{itemize}
+\item output: $out := T$
+\item exception: none
+\end{itemize}
+
+\noindent get\_reflectance():
+\begin{itemize}
+\item output: $out := R$
+\item exception: none
+\end{itemize}
+
+\noindent get\_unit\_normal():
+\begin{itemize}
+\item output: $out := n1, n2$
+\item exception: none
+\end{itemize}
+
+\noindent get\_line\_equation():
+\begin{itemize}
+\item output: $out := m1, m2, k$
+\item exception: none
+\end{itemize}
+
+\subsubsection{Local Functions}
+\noindent  find\_unit\_normal($C_x, D_x$):
+\begin{itemize}
+\item transition:\\
+$x_{C_x}, y_{C_x}$ := $C_x$.get\_coordinates()\\
+$x_{D_x}, y_{D_x}$ := $D_x$.get\_coordinates()\\
+$\begin{bmatrix} n1 & n2 \end{bmatrix} := \begin{bmatrix}
+  (x_{D_x}-x_{C_x}) & (y_{D_x}-y_{C_x})\\
+  \end{bmatrix}$
+  $\begin{bmatrix}
+  0 & -1\\
+  1 & 0
+  \end{bmatrix} \cdot \frac{1}{\sqrt{(y_{D_x}-y_{C_x})^2+(x_{D_x}-x_{C_x})^2}}
+  $
+\item output: out := $n1, n2$
+\item exception: none
+\end{itemize}
+
+\newpage
+\section{MIS of Floor Map Module} \label{floorMap}
+
+\subsection{Module}
+
+FloorMap
+
+\subsection{Uses}
+
+Param(\autoref{inputParamModule}), Point(\autoref{pointModule}), Wall(\autoref{wallModule})
+
+\subsection{Syntax}
+
+\subsubsection{Exported Constants}
+
+None
+
+\subsubsection{Exported Access Programs}
+
+\begin{center}
+\begin{tabular}{p{4cm} p{2.7cm} p{2cm} p{4cm}}
+\hline
+\textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
+\hline
+create & - & FloorMap & - \\
+get\_wall & $\mathbb{N}_0$ & Wall & invalidIndex \\
+get\_map & - & FloorMap & - \\
+\hline
+\end{tabular}
+\end{center}
+
+\subsection{Semantics}
+
+\subsubsection{State Variables}
+wall\_list: set[Wall]\\
+wall\_list\_length: $\mathbb{N}_0$\\
+\subsubsection{Environment Variables} None
+
+\subsubsection{Assumptions} create() will be called before the FloorMap object can be accessed.
+
+\subsubsection{Access Routine Semantics}
+
+\noindent create():
+\begin{itemize}
+\item transition: \\
+Get parameters of all walls from Input Parameters Module (\autoref{inputParamModule}):\\
+Let $list_C$ = Param.$[C]$();\\
+Let $list_D$ = Param.$[D]$();\\
+Let $list_T$ = Param.$[T]$();\\
+Let $list_R$ = Param.$[R]$();\\
+Then:\\
+wall\_list\_length := Param.$length_C$()\\
+Then create wall\_list as such:\\
+for $i$ = \{0, 1, 2, ... , (wall\_list\_length - 1)\},\\
+\indent\indent wall\_list($i$) := Wall.create($list_C(i), list_D(i), list_T(i), list_R(i)$)
+\item output: $out$ := self
+\item exception: none
+\end{itemize}
+
+\noindent get\_wall(index: $\mathbb{N}_0$):
+\begin{itemize}
+\item output: $out$ := wall\_list(index)
+\item exception: exc := $\neg$(0 $\leq$ index $\leq$ wall\_list\_length - 1) $\Rightarrow$ invalidIndex
+\end{itemize}
+
+\noindent get\_map():
+\begin{itemize}
+\item output: $out$ := self
+\item exception: none
+\end{itemize}
+
+\subsubsection{Local Functions}
+None
+
+
+
+\newpage
+\section{MIS of Equation Finder} \label{equationFinder}
+
+\subsection{Module}
+
+EquationFinder
+
+\subsection{Uses}
+Point(\autoref{pointModule})
+
+\subsection{Syntax}
+
+\subsubsection{Exported Constants}
+
+None
+
+\subsubsection{Exported Access Programs}
+
+\begin{center}
+\begin{tabular}{p{4cm} p{2.3cm} p{3cm} p{4cm}}
+\hline
+\textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
+\hline
+find\_equation & start: Point, end: Point & m1: $\mathbb{R}$, m2: $\mathbb{R}$, k: $\mathbb{R}$ & - \\
+\hline
+\end{tabular}
+\end{center}
+
+\subsection{Semantics}
+
+\subsubsection{State Variables} None
+
+\subsubsection{Environment Variables} None
+
+\subsubsection{Assumptions} None
+
+\subsubsection{Access Routine Semantics}
+
+\noindent find\_equation(start: Point, end: Point):
+\begin{itemize}
+\item output:\\
+Let $x_{C_x}, y_{C_x}$ = start.get\_coordinates();\\
+Let $x_{D_x}, y_{D_x}$ = end.get\_coordinates();\\
+Then\\
+$ m1 :=
+  \begin{cases}
+  -\frac{y_{D_x}-y_{C_x}}{x_{D_x}-x_{C_x}} & $if $ x_{D_x}-x_{C_x}\neq{0}\\
+  1 & $else$\\
+  \end{cases}
+  $\\
+  $ m2 :=
+  \begin{cases}
+  1 & $if $ x_{D_x}-x_{C_x}\neq{0}\\
+  0 & $else$\\
+  \end{cases}
+  $\\
+  $k := m1\cdot x_{C_x} + m2\cdot y_{C_x} = m1\cdot x_{D_x} + m2\cdot y_{D_x}$\\
+  $out := m1, m2, k$
+\item exception: none
+\end{itemize}
+
+\subsubsection{Local Functions}
+None
+
+
+
+\newpage
+\section{MIS of Linear Signal Path Module} \label{linearPathModule}
+
+\subsection{Module}
+
+LinearPath
+
+\subsection{Uses}
+
+Point (\autoref{pointModule}), EquationFinder (\autoref{equationFinder}) 
+
+\subsection{Syntax}
+
+\subsubsection{Exported Constants} None
+
+\subsubsection{Exported Access Programs}
+
+\begin{center}
+\begin{tabular}{p{4cm} p{2.3cm} p{3cm} p{2cm}}
+\hline
+\textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
+\hline
+create & start: Point, end: Point & LinearPath & - \\
+get\_equation & - & $m1: \mathbb{R}$, $m2: \mathbb{R}$, $k: \mathbb{R}$ & - \\
+get\_start\_point & - & Point & - \\
+get\_end\_point & - & Point & - \\
+get\_length & - & $\mathbb{R}$ & - \\
+\hline
+\end{tabular}
+\end{center}
+
+\subsection{Semantics}
+
+\subsubsection{State Variables}
+$E$: Point\\
+$F$: Point\\
+$m1: \mathbb{R}$\\
+$m2: \mathbb{R}$\\
+$k: \mathbb{R}$\\
+$length: \mathbb{R}$
+
+\subsubsection{Environment Variables} None
+
+\subsubsection{Assumptions} None
+
+\subsubsection{Access Routine Semantics}
+
+\noindent create(start: Point, end: Point):
+\begin{itemize}
+\item transition: \\
+$E$ := start\\
+$F$ := end\\
+
+Use Equation Finder Module to find the path's equation parameters:\\
+$m1, m2, k$ :=  EquationFinder.find\_equation($E, F$)\\
+
+
+Let $x_E, y_E$ = $E$.get\_coordinates();\\
+Let $x_F, y_F$ = $F$.get\_coordinates();\\
+The find the physical length of the linear path:\\
+$length := \sqrt{(x_E - x_F)^2 + (y_E - y_F)^2}$
+\item output: $out$ := self 
+\item exception: none
+\end{itemize}
+
+\noindent get\_equation():
+\begin{itemize}
+\item output: $out :=  m1, m2, k$
+\item exception: none
+\end{itemize}
+
+\noindent get\_start\_point():
+\begin{itemize}
+\item output: $out :=  E$
+\item exception: none
+\end{itemize}
+
+\noindent get\_end\_point():
+\begin{itemize}
+\item output: $out :=  F$
+\item exception: none
+\end{itemize}
+
+\noindent get\_length():
+\begin{itemize}
+\item output: $out :=  length$\
+\item exception: none
+\end{itemize}
+
+\subsubsection{Local Functions} None
+
+
+
+\newpage
+\section{MIS of Intersection Module} \label{intersectionModule}
+
+\subsection{Module}
+
+Intersection
+
+\subsection{Uses}
+
+Point (\autoref{pointModule}), Wall (\autoref{wallModule}), LinearPath (\autoref{linearPathModule}) 
+
+\subsection{Syntax}
+
+\subsubsection{Exported Constants} None
+
+\subsubsection{Exported Access Programs}
+
+\begin{center}
+\begin{tabular}{p{4cm} p{2.3cm} p{3cm} p{2cm}}
+\hline
+\textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
+\hline
+find\_intersection & Wall, LinearPath & Point & - \\
+is\_valid & Wall, LinearPath & Boolean & - \\
+\hline
+\end{tabular}
+\end{center}
+
+\subsection{Semantics}
+
+\subsubsection{State Variables}None
+
+\subsubsection{Environment Variables} None
+
+\subsubsection{Assumptions} None
+
+\subsubsection{Access Routine Semantics}
+
+\noindent find\_intersection($wall$: Wall, $path$: LinearPath):
+\begin{itemize}
+\item output: \\
+Let $M$ = 
+$\begin{bmatrix}
+wall.m1 & wall.m2\\
+path.m1 & path.m2
+\end{bmatrix}$;\\
+Let $K$ = 
+$\begin{bmatrix}
+wall.k\\
+path.k
+\end{bmatrix}$;\\
+
+$t'$ := Point.create($x, y$) such that $M
+\begin{bmatrix}
+x\\
+y
+\end{bmatrix} = K
+$, if $det(M) \neq 0$; or\\
+
+$t'$ := Point.create(0, 0), if $det(M) = 0$.
+
+$out$ := $t'$
+\item exception: none
+\end{itemize}
+
+\noindent is\_valid($wall$: Wall, $path$: LinearPath):
+\begin{itemize}
+\item output: \\
+Let $M$ = 
+$\begin{bmatrix}
+wall.m1 & wall.m2\\
+path.m1 & path.m2
+\end{bmatrix}$;\\
+Let $K$ = 
+$\begin{bmatrix}
+wall.k\\
+path.k
+\end{bmatrix}$;\\
+
+If $det(M) \neq 0$, \\
+$t'$ := Point.create($x, y$) such that $M
+\begin{bmatrix}
+x\\
+y
+\end{bmatrix} = K
+$\\
+If\\ 
+$\max(\min(wall.C_x.x, wall.D_x.x),\min(path.C_x.x, path.D_x.x)) < t'.x < min(max(wall.C_x.x, wall.D_x.x),max(path.C_x.x, path.D_x.x))$\\
+and\\ 
+$\max(\min(wall.C_x.y, wall.D_x.y),\min(path.C_x.y, path.D_x.y)) < t'.x < min(max(wall.C_x.y, wall.D_x.y),max(path.C_x.y, path.D_x.y))$,\\
+$Ind$ := 1;\\
+otherwise $Ind$ := 0.\\
+If $det(M) = 0$,\\
+$Ind$ := 0.\\
+
+$out$ := $Ind$
+\item exception: none
+\end{itemize}
+
+
+\subsubsection{Local Functions} None
+
+
+
+\newpage
+\section{MIS of Linear Path Loss Module} \label{linearLossModule}
+
+\subsection{Module}
+
+LinearLoss
+
+\subsection{Uses}
+FloorMap (\autoref{floorMap}), LinearPath (\autoref{linearPathModule}), Intersection (\autoref{intersectionModule})
+
+\subsection{Syntax}
+
+\subsubsection{Exported Constants}
+
+None
+
+\subsubsection{Exported Access Programs}
+
+\begin{center}
+\begin{tabular}{p{4cm} p{3cm} p{3cm} p{4cm}}
+\hline
+\textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
+\hline
+find\_linear\_path\_loss & path:LinearPath, f: $\mathbb{R}$ & $\mathbb{R}$ & - \\
+\hline
+\end{tabular}
+\end{center}
+
+\subsection{Semantics}
+
+\subsubsection{State Variables} None
+
+\subsubsection{Environment Variables} None
+
+\subsubsection{Assumptions} FloorMap.create() will be called before calling FloorMap.get\_map().
+
+\subsubsection{Access Routine Semantics}
+
+\noindent find\_linear\_path\_loss ($path$: LinearPath, $freq:\mathbb{R}$):
+\begin{itemize}
+\item output: \\
+The output is dependent on two parameters: $FSPL$ and $T_{total}$.\\
+Update $FSPL$:\\
+$map$: FloorMap.get\_map()\\
+$FSPL$ := $(\frac{4\pi \cdot path.length}{3\times10^8})^2$\\
+
+Update $T_{total}$:\\
+$T_{total}$ := $\Pi_{x=0}^{N_w}(wall_x \cdot T_x^{Ind_{t,x}})$\\
+Where\\
+$N_w$ := $map$.wall\_list\_length - 1\\
+$wall_x$ := map.get\_wall($x$)\\
+$Ind_{t,x}$ := Intersection.is\_valid($wall_x, path$)\\
+
+$out$ := $\frac{T_{total}}{FSPL}$
+\item exception: none
+\end{itemize}
+
+\subsubsection{Local Functions}
+None
+
+
+
+\newpage
+\section{MIS of Line-Of-Sight Signal Module} \label{losModule}
+
+\subsection{Module}
+
+LineOfSight
+
+\subsection{Uses}
+Param (\autoref{inputParamModule}), Point (\autoref{pointModule}), LinearPath (\autoref{linearPathModule}),  LinearLoss (\autoref{linearLossModule})
+
+\subsection{Syntax}
+
+\subsubsection{Exported Constants}
+
+$\phi_{LOS}$ := 0
+
+\subsubsection{Exported Access Programs}
+
+\begin{center}
+\begin{tabular}{p{4cm} p{3cm} p{3cm} p{4cm}}
+\hline
+\textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
+\hline
+create & sampling\_point: Point & LineOfSight & - \\
+get\_path\_length & - & $\mathbb{R}$ & - \\
+get\_amplitude & - & $\mathbb{R}$ & - \\
+get\_phase\_angle & - & $\mathbb{R}$ & - \\
+\hline
+\end{tabular}
+\end{center}
+
+\subsection{Semantics}
+
+\subsubsection{State Variables} 
+$Pos_{sp}$: Point\\
+$d_{tsm,sp}$: $\mathbb{R}$\\
+$P_{LOS}$: $\mathbb{R}$
+
+\subsubsection{Environment Variables} None
+
+\subsubsection{Assumptions} None
+
+\subsubsection{Access Routine Semantics}
+
+\noindent create(sampling\_point: Point):
+\begin{itemize}
+\item transition: \\
+Update $Pos_{sp}$:\\
+$Pos_{sp}$ := sampling\_point\\
+
+Update $d_{tsm,sp}$:\\
+$freq$ := Param.$f()$\\
+$Pos_{tsm}$ := Param.$Pos_{tsm}()$\\
+$path$ := LinearPath.create($Pos_{tsm}, Pos_{sp}$)\\
+$d_{tsm,sp}$ := $path$.get\_length()\\
+
+Update $P_{LOS}$:\\
+$P_{tsm}^{dBm}$ := Param.$P_{tsm}^{dBm}()$\\
+$P_{tsm}$ := $10^\frac{P_{tsm}^{dBm}-30}{10}$\\
+$P_{LOS}$ := $P_{tsm} \cdot$ LinearLoss.find\_linear\_path\_loss($path, freq$)\\
+\item output: $out$ := self
+\item exception: none
+\end{itemize}
+
+\noindent get\_path\_length():
+\begin{itemize}
+\item output: $out$ := $d_{tsm,sp}$
+\item exception: none
+\end{itemize}
+
+\noindent get\_amplitude():
+\begin{itemize}
+\item output: $out$ := $P_{LOS}$
+\item exception: none
+\end{itemize}
+
+\noindent get\_phase\_angle():
+\begin{itemize}
+\item output: $out$ := $\phi_{LOS}$
+\item exception: none
+\end{itemize}
+
+\subsubsection{Local Functions}
+None
+
+
+
+\newpage
+\section{MIS of Specular Reflection Module} \label{specularReflection}
+
+\subsection{Module}
+
+Specular
+
+\subsection{Uses}
+Point (\autoref{pointModule}), Wall (\autoref{wallModule}), LinearPath (\autoref{linearPathModule}),  Intersection (\autoref{intersectionModule})
+
+\subsection{Syntax}
+
+\subsubsection{Exported Constants} None
+
+\subsubsection{Exported Access Programs}
+
+\begin{center}
+\begin{tabular}{p{4cm} p{2cm} p{4cm} p{2cm}}
+\hline
+\textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
+\hline
+get\_mirrored\_paths & $wall_x$:Wall, $start$:Point, $end$:Point & $path_{RS1}$:LinearPath, $path_{RS2}$:LinearPath, $Ind_{r,x}$: Boolean & - \\
+
+\hline
+\end{tabular}
+\end{center}
+
+\subsection{Semantics}
+
+\subsubsection{State Variables} None
+
+\subsubsection{Environment Variables} None
+
+\subsubsection{Assumptions} None
+
+\subsubsection{Access Routine Semantics}
+
+\noindent get\_mirrored\_paths($wall_x$:Wall, $start$:Point, $end$:Point):
+\begin{itemize}
+\item output: \\
+Let $n$ := $\begin{bmatrix}
+wall_x.n1 & wall_x.n2
+\end{bmatrix}$;\\
+Let $t$ := $\begin{bmatrix}
+wall_x.C_x.x & wall_x.C_x.y
+\end{bmatrix}$;\\
+Let $p$ := $\begin{bmatrix}
+start.x & start.y)
+\end{bmatrix}$;\\
+Then solve\\
+$\begin{bmatrix}
+p'_x & p'_y\\
+\end{bmatrix} = p-2n(n\cdot(p-t))$\\
+for the values of $p'_x$ and $p'_y$.\\
+let $p'$ := Point.create($p'_x$, $p'_y$);\\
+Let $mirrored\_path$ := LinearPath.create($p',end$);\\
+Then\\
+$t'$ := Intersection.find\_intersection($wall_x, mirrored\_path$);\\
+$Ind_{r,x}$ := Intersection.is\_valid($wall_x, mirrored\_path$);\\
+$path_{RS1}$ := LinearPath.create($p,t'$);\\
+$path_{RS2}$ := LinearPath.create($t',end$);\\
+$out$ := $path_{RS1}$, $path_{RS2}$, $Ind_{r,x}$
+\item exception: none
+\end{itemize}
+
+\subsubsection{Local Functions}
+None
+
+
+
+\newpage
+\section{MIS of First-Order Reflection Signal Module} \label{forsModule}
+
+\subsection{Module}
+
+FirstOrderReflection
+
+\subsection{Uses}
+Param (\autoref{inputParamModule}), Wall (\autoref{wallModule}), LinearLoss (\autoref{linearPathModule}), LineOfSight (\autoref{losModule}), Specular (\autoref{specularReflection})
+
+\subsection{Syntax}
+
+\subsubsection{Exported Constants} None
+
+\subsubsection{Exported Access Programs}
+
+\begin{center}
+\begin{tabular}{p{3cm} p{3cm} p{4cm} p{2cm}}
+\hline
+\textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
+\hline
+create & $wall_x$: Wall, $sampling\_point$: Point, $LOS$: LineOfSight & FirstOrderReflection & - \\
+get\_amplitude & - & $\mathbb{R}$ & - \\
+get\_phase\_angle & - & $\mathbb{R}$ & - \\
+
+\hline
+\end{tabular}
+\end{center}
+
+\subsection{Semantics}
+
+\subsubsection{State Variables} 
+$Pos_{sp}$: Point\\
+$path_{RS1}$: LinearPath\\
+$path_{RS2}$: LinearPath\\
+$Ind_{r,x}$: Boolean\\
+$P_{FORS}$: $\mathbb{R}$\\
+$\phi_{FORS}$: $\mathbb{R}$\\
+
+\subsubsection{Environment Variables} None
+
+\subsubsection{Assumptions} None
+
+\subsubsection{Access Routine Semantics}
+
+\noindent create($wall_x$:Wall, sampling\_point: Point, $LOS$: LineOfSight):
+\begin{itemize}
+\item transition:\\
+Update $Pos_{sp}$:\\
+$Pos_{sp}$ := $sampling\_point$\\
+
+Update $path_{RS1}$, $path_{RS2}$, and $Ind_{r,x}$:\\
+$freq$ := Param.$f()$\\
+$Pos_{tsm}$ := Param.$Pos_{tsm}()$\\
+$path_{RS1}$, $path_{RS2}$, $Ind_{r,x}$ := Specular.get\_mirrored\_paths($wall_{x}, Pos_{tsm}, Pos_{sp}$)\\
+
+Update $P_{FORS}$:\\
+If $Ind_{r,x}$ = 1:\\
+$P_{tsm}^{dBm}$ := Param.$P_{tsm}^{dBm}()$\\
+$P_{tsm}$ := $10^\frac{P_{tsm}^{dBm}-30}{10}$\\
+$transmittance_{RS1}$ := LinearLoss.find\_linear\_path\_loss($path_{RS1}, freq$)\\
+$transmittance_{RS2}$ := LinearLoss.find\_linear\_path\_loss($path_{RS2}, freq$)\\
+$P_{FORS}$ := $P_{tsm} \cdot transmittance_{RS1} \cdot transmittance_{RS2} \cdot wall_x.$get\_reflectance()\\
+Otherwise:\\
+$P_{FORS} := 0$\\
+
+Update $\phi_{FORS}$:\\
+If $Ind_{r,x}$ = 1:\\
+$\phi_{FORS} := 2 \pi f \frac{path_{RS1}.length + path_{RS2}.length - LOS.d_{tsm,sp}}{3\times10^8}$
+Otherwise:\\
+$\phi_{FORS} := 0$
+
+\item output: $out$ := self
+\item exception: none
+\end{itemize}
+
+\noindent get\_amplitude():
+\begin{itemize}
+\item output: $out$ := $P_{FORS}$
+\item exception: none
+\end{itemize}
+
+\noindent get\_phase\_angle():
+\begin{itemize}
+\item output: $out$ := $\phi_{FORS}$
+\item exception: none
+\end{itemize}
+
+\subsubsection{Local Functions}
+None
+
+
+
+\newpage
+\section{MIS of Received Signal Strength Module} \label{rssModule}
+
+\subsection{Module}
+
+ReceivedSignalStrength
+
+\subsection{Uses}
+FloorMap (\autoref{floorMap}), LineOfSight (\autoref{losModule}), FirstOrderReflection (\autoref{forsModule})
+
+\subsection{Syntax}
+
+\subsubsection{Exported Constants} None
+
+\subsubsection{Exported Access Programs}
+
+\begin{center}
+\begin{tabular}{p{4cm} p{4cm} p{2cm} p{2cm}}
+\hline
+\textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
+\hline
+get\_received\_power & $map$: FloorMap, $sampling\_point$: Point & $\mathbb{R}$ & invalidReceivedStrength \\
+
+\hline
+\end{tabular}
+\end{center}
+
+\subsection{Semantics}
+
+\subsubsection{State Variables} None
+
+\subsubsection{Environment Variables} None
+
+\subsubsection{Assumptions} FloorMap.create() will be called before calling FloorMap.get\_map() in this module.
+
+\subsubsection{Access Routine Semantics}
+
+\noindent get\_received\_power($map$: FloorMap, $sampling\_point$: Point):
+\begin{itemize}
+\item output:\\
+Get Floor Map:\\
+$map$ := FloorMap.get\_map()\\
+$map\_complexity$ := $map$.wall\_list\_length - 1
+
+Find Line-Of-Sight Signal\\
+$LOS$ := LineOfSight.create($sampling\_point$)\\
+
+Find First-Order reflection signals by wall:\\
+For $x$ in (0, 1, 2, ... , $map\_complexity$):\\
+$wall_x$ := $map$.get\_wall($x$)\\
+$FORS(x)$ := FirstOrderReflection.create($wall_x, sampling\_point, LOS$)\\
+
+Find total received signal:\\
+$P_{LOS} := LOS.$get\_amplitude()\\
+$\phi_{LOS} := LOS.$get\_phase\_angle()\\
+$P_{FORS_x} := FORS(x).$get\_amplitude()\\
+$\phi_{FORS_x} := FORS(x).$get\_phase\_angle()\\
+$P_{sp}\angle\phi_{sp} := P_{LOS}\angle\phi_{LOS} + \sum_{x = 0}^{map\_complexity}P_{FORS_x}\angle\phi_{FORS_x}$\\
+$P_{sp}^{dBm} := 30 + 10\log_{10}(P_{sp})$\\
+$out$ := $P_{sp}^{dBm}$
+\item exception: $exc$ := $(P_{tsm}^{dBm} \leq P_{sp}^{dBm}) \Rightarrow$ invalidReceivedStrength
+\end{itemize}
+
+\subsubsection{Local Functions}
+None
+
+
+
+\newpage
+\section{MIS of Output Module} \label{outputModule}
+
+\subsection{Module}
+
+Output
+
+\subsection{Uses}
+Param (\autoref{inputParamModule}), Point (\autoref{pointModule})
+
+\subsection{Syntax}
+
+\subsubsection{Exported Constants} None
+
+\subsubsection{Exported Access Programs}
+
+\begin{center}
+\begin{tabular}{p{3cm} p{3cm} p{3cm} p{3cm}}
+\hline
+\textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
+\hline
+output & fname: string, $[Pos_{sp}]$: set[Point], $[P_{sp}^{dBm}]$: set[$\mathbb{R}$] & - & - \\
+
+\hline
+\end{tabular}
+\end{center}
+
+\subsection{Semantics}
+
+\subsubsection{State Variables} None
+
+\subsubsection{Environment Variables} file: a text file
+
+\subsubsection{Access Routine Semantics}
+
+\noindent output(fname, $[Pos_{sp}]$, $[P_{sp}^{dBm}]$):
+\begin{itemize}
+\item transition: write to environment variable named fname the calculated received signal strengths $[P_{sp}^{dBm}]$ and their corresponding sampling points in $[Pos_{sp}]$.\\
+Each line of the output file will be 3 numbers separated by comma: [$Pos_{sp}.x, Pos_{sp}.y, P_{sp}^{dBm}$].
+
+\item exception: none
+\end{itemize}
+
+\subsubsection{Local Functions}
+None
+
+
+
+\newpage
+\section{MIS of Specification Parameters} \label{specParamModule}
+
+\subsection{Module}
+
+SpecParam
+
+\subsection{Uses} None
+
+\subsection{Syntax}
+
+\subsubsection{Exported Constants}
+
+From \autoref{TblSpecParams} in SRS
+  $P_{max}^{dBm}$ := 15 (\si{dBm})\\
+  $P_{min}^{dBm}$ := -30 (\si{dBm})\\
+  $f_{min}$ := 30 (\si{\hertz})\\
+  $f_{max}$ := $3\times 10^{11}$  (\si{\hertz})\\
+  $x_{min}$ := -20 (\si{\meter})\\
+  $x_{max}$ := 20 (\si{\meter})\\
+  $y_{min}$ := -20 (\si{\meter})\\
+  $y_{max}$ := 20 (\si{\meter})\\
+
+\subsection{Semantics}
+N/A
+
+
+
+\newpage
+
+\bibliographystyle {plainnat}
+\bibliography {../../../refs/References}
+
+\end{document}
