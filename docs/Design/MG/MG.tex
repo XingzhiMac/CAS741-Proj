@@ -34,7 +34,7 @@
 
 \begin{document}
 
-\title{Module Guide for Radio Signal Strength Calculator} 
+\title{Module Guide for RSSC} 
 \author{Xingzhi Liu}
 \date{\today}
 
@@ -48,6 +48,7 @@
 \toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
 \midrule
 Nov 19, 2020 & 1.0 & First Draft\\
+Dec 18, 2020 & 1.1 & Revision 1\\
 \bottomrule
 \end{tabularx}
 
@@ -72,7 +73,7 @@ This section records information for easy reference.
   R & Requirement\\
   SC & Scientific Computing \\
   SRS & Software Requirements Specification\\
-  \progname & Explanation of program name\\
+  RSSC & Explanation of program name\\
   UC & Unlikely Change \\
   \bottomrule
 \end{tabular}\\
@@ -158,7 +159,7 @@ change.
 \begin{description}
 \item[\refstepcounter{acnum} \actheacnum \label{acHardware}:] The specific
   hardware on which the software is running.
-\item[\refstepcounter{acnum} \actheacnum \label{acControl}:] The overall control of the calculation.
+\item[\refstepcounter{acnum} \actheacnum \label{acControl}:] The overall control of the calculation. (e.g. shall we calculate the signal strength at different sampling points in parallel or calculate them one by one?)
 \item[\refstepcounter{acnum} \actheacnum \label{acInputParam}:] The format of the
   input parameters.
 \item[\refstepcounter{acnum} \actheacnum \label{acInputConstr}:] The constraints on the
@@ -181,8 +182,8 @@ will potentially need to be modified. Hence, it is not intended that these
 decisions will be changed.
 
 \begin{description}
-\item[\refstepcounter{ucnum} \uctheucnum \label{ucIO}:] Input/Output devices
-  (Input: File and/or Keyboard, Output: File, Memory, and/or Screen).
+\item[\refstepcounter{ucnum} \uctheucnum \label{ucIO}:] Input/Output files
+  (Input files: three files in .csv format: tsmFile for transmitter, spFile for sampling points, and wallFile for the floor map; Output file: one file in .csv format).
 \item[\refstepcounter{ucnum} \uctheucnum \label{ucWallShape}:] Walls are linear with finite lengths.
 \item[\refstepcounter{ucnum} \uctheucnum \label{ucSingleSource}:] Only one transmitter works in the area of simulation.
 \item[\refstepcounter{ucnum} \uctheucnum \label{ucSegment}:] Line segments are represented with a starting and an ending point, in addition to the linear equation (e.g. $m1\cdot x+m2\cdot y = k$) of that line.
@@ -230,8 +231,7 @@ actually be implemented.
 \multirow{3}{0.3\textwidth}{Behaviour-Hiding} & Input Parameters\\
 & Output\\
 & Control Module\\
-& Received Signal Strength\\
-& Specification Parameters Module\\
+& Specification Parameters\\
 \midrule
 
 \multirow{3}{0.3\textwidth}{Software Decision} & Point\\
@@ -244,6 +244,7 @@ actually be implemented.
 & Line-Of-Sight Signal\\
 & Specular Reflection\\
 & First Order Reflection Signal\\
+& Received Signal Strength\\
 \bottomrule
 
 \end{tabular}
@@ -266,8 +267,8 @@ module. The \emph{Services} field specifies \emph{what} the module will do
 without documenting \emph{how} to do it. For each module, a suggestion for the
 implementing software is given under the \emph{Implemented By} title. If the
 entry is \emph{OS}, this means that the module is provided by the operating
-system or by standard programming language libraries.  \emph{\progname{}} means the
-module will be implemented by the \progname{} software.
+system or by standard programming language libraries.  \emph{RSSC} means the
+module will be implemented by the RSSC software.
 
 Only the leaf modules in the hierarchy have to be implemented. If a dash
 (\emph{--}) is shown, this means that the module is not a leaf and will not have
@@ -432,7 +433,7 @@ to be implemented.
 \section{Traceability Matrix} \label{SecTM}
 
 This section shows two traceability matrices: between the modules and the
-requirements and between the modules and the anticipated changes. Two of the anticipated changes (\acref{acInputParam} and \acref{acInputConstr}) are mapped to the same module (\mref{mInput}). The reason for this is that the services to store and verify user inputs in this module will always be provided together.
+requirements and between the modules and the anticipated changes. Two of the anticipated changes (\acref{acInputParam} and \acref{acInputConstr}) are mapped to the same module (\mref{mIP}). The reason for this is that the services to store and verify user inputs in this module will always be provided together.
 
 
 \begin{table}[H]
