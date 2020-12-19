@@ -31,7 +31,7 @@ urlcolor=cyan          % color of external links
 
 \usepackage{array}
 
-\externaldocument[SRS-]{../../../SRS/SRS}
+\externaldocument{../../SRS/SRS}
 
 \input{../../Comments}
 \input{../../Common}
@@ -54,6 +54,7 @@ urlcolor=cyan          % color of external links
 \toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
 \midrule
 Nov. 19, 2020 & 1.0 & Initial Release\\
+Dec. 18, 2020 & 1.1 & Revision 1\\
 \bottomrule
 \end{tabularx}
 
@@ -61,7 +62,26 @@ Nov. 19, 2020 & 1.0 & Initial Release\\
 
 \section{Symbols, Abbreviations and Acronyms}
 
-See SRS Documentation at \url{https://github.com/XingzhiMac/CAS741-Proj/}
+See SRS Documentation at \url{https://github.com/XingzhiMac/CAS741-Proj/}\\
+
+The table that follows summarizes the symbols used in this document that are not
+mentioned in SRS.
+
+\renewcommand{\arraystretch}{1.2}
+%\noindent \begin{tabularx}{1.0\textwidth}{l l X}
+\noindent \begin{longtable*}{l l p{12cm}} \toprule
+\textbf{symbol} & \textbf{unit} & \textbf{description}\\
+\midrule 
+$\forall$ & - & for all
+\\
+$\neg$ & - & not
+\\
+$\Rightarrow$ & - & implies/leads to
+\\
+$:=$ & - & equal by definition
+\\
+\bottomrule
+\end{longtable*}
 
 \newpage
 
@@ -1400,7 +1420,7 @@ SpecParam
 
 \subsubsection{Exported Constants}
 
-From \autoref{TblSpecParams} in SRS
+From Table \ref{TblSpecParams} in SRS:\\
   $P_{max}^{dBm}$ := 15 (\si{dBm})\\
   $P_{min}^{dBm}$ := -30 (\si{dBm})\\
   $f_{min}$ := 30 (\si{\hertz})\\
