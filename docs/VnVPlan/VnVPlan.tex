@@ -4,6 +4,7 @@
 \usepackage{longtable}
 \usepackage{tabularx}
 \usepackage{hyperref}
+\usepackage{pdflscape}
 \hypersetup{
     colorlinks,
     citecolor=blue,
@@ -31,7 +32,8 @@
 \begin{tabularx}{\textwidth}{p{3cm}p{2cm}X}
 \toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
 \midrule
-Oct 30, 2020 & 1.0 & First Draft of VnV Plan\\
+Oct 30, 2020 & 1.0 & First Draft\\
+Dec 20, 2020 & 1.1 & Revision 1\\
 \bottomrule
 \end{tabularx}
 
@@ -125,7 +127,9 @@ tested following the descriptions in this document.
 \subsection{SRS Verification Plan}
 
 SRS will be done by team members reviewing the document. Team members can put
-any comments, suggestions or questions in RSSC's Github repository as issues.
+any comments, suggestions or questions in RSSC's Github repository as issues. The
+SRS reviewing team includes the following members: domain expert Siddharth (Sid) Shinde, 
+the SRS reviewer Leila Mousapour, Dr. Spencer Smith, and the author Xingzhi Liu.
 The author will respond to the issues and make modifications when needed.
 
 \subsection{Design Verification Plan}
@@ -135,8 +139,8 @@ of calculation in the software follows the physical model in SRS or not.
 
 \subsection{Implementation Verification Plan}
 
-Implementation verification will be done by testing all the functional and non-
-functional requirements. Descriptions of the tests can be found in \autoref{tfr} and \autoref{tnfr}. In addition, we will undergo static verification by checking
+Implementation verification will be done by testing all the functional and non-functional requirements. Descriptions of the tests can be found in \autoref{tfr} and \autoref{tnfr}. 
+In addition, we will undergo static verification by checking
 all the codes we build with Pylint. We will also conduct unit testing for modules
 within the testing scope. Details for unit testing can be found in \autoref{unittest}.
 
@@ -148,8 +152,6 @@ within the testing scope. Details for unit testing can be found in \autoref{unit
 \begin{itemize}
 	\item Pylint
 \end{itemize}
-\wss{The details of this section will likely evolve as you get closer to the
-  implementation.}
 
 \subsection{Software Validation Plan}
 
@@ -175,7 +177,7 @@ R1 and R2 are corresponding to inputs, while R3 to R5 are corresponding to outpu
 \autoref{area1} describes the input tests for R1 and R2; and \autoref{area2} 
 describes the output tests for R3, R4 and R5.
 
-\subsubsection{Area of Testing1 - Input}\label{Ainput}
+\subsubsection{Input}\label{Ainput}
 \label{area1}
 
 This test verifies the following requirements: \\
@@ -305,11 +307,9 @@ Test Case Derivation: Correct error message displays.
 How test will be performed: Tester manually feeds the inputs into
 RSSC and executes RSSC.
 
-\wxz{TODO - learn how to write automatic testing scripts to generate random valid input
-sets and feed into RSSC.}
 \end{enumerate}
 
-\subsubsection{Area of Testing2 - Output}\label{Aoutput}
+\subsubsection{Output}\label{Aoutput}
 \label{area2}
 
 This test verifies the following requirements: \\
@@ -372,8 +372,6 @@ Test Case Derivation: RSSC returns the correct output.
 					
 How test will be performed: Tester manually feeds the inputs into
 RSSC and executes RSSC.
-\wxz{TODO - learn how to write automatic testing scripts to generate random 
-valid input sets and feed into RSSC.}
 
 \end{enumerate}
 
@@ -507,11 +505,11 @@ shown in \autoref{ut}.
 		\hline
 		& R1 & R2 & R3 & R4 & R5 & Portable & Maintainable & Understandable\\
 		\hline
-		\ref{Ainput}    &X&X& & & & & & \\ \hline
-		\ref{Aoutput}   & & &X&X&X& & & \\ \hline
-		\ref{Aport}     & & & & & &X& & \\ \hline
-		\ref{Amaintain} & & & & & & &X& \\ \hline
-		\ref{Audst}     & & & & & & & &X\\ \hline
+		\nameref{Ainput}    &X&X& & & & & & \\ \hline
+		\nameref{Aoutput}   & & &X&X&X& & & \\ \hline
+		\nameref{Aport}     & & & & & &X& & \\ \hline
+		\nameref{Amaintain} & & & & & & &X& \\ \hline
+		\nameref{Audst}     & & & & & & & &X\\ \hline
 	\end{tabular}
 	\caption{Traceability Between Test Cases and Requirements}
 	\label{Table:A_trace}
@@ -520,137 +518,401 @@ shown in \autoref{ut}.
 \section{Unit Test Description}
 \label{unittest}
 
-\wss{Reference your MIS and explain your overall philosophy for test case
-  selection.}  
-\wss{This section should not be filled in until after the MIS has
-  been completed.}
-
 \subsection{Unit Testing Scope}
 
-\wss{What modules are outside of the scope.  If there are modules that are
-  developed by someone else, then you would say here if you aren't planning on
-  verifying them.  There may also be modules that are part of your software, but
-  have a lower priority for verification than others.  If this is the case,
-  explain your rationale for the ranking of module importance.}
+We will conduct unit testings for the following modules:
+\begin{itemize}
+	\item Point
+	\item Wall
+	\item Linear Path
+	\item Intersection
+	\item Linear Path Loss
+	\item Specular Reflection
+\end{itemize}
+Modules including Control, Input Parameters, Output, and Floor Map have low priorities for
+verification than others because their correctness can be adequately proven by 
+\nameref{area1} and \nameref{area2}.\\
+Module Received Signal Strength only contains some basic numerical calculations so
+we do not need to test it separately. \nameref{area2} will be sufficient to verify its functionality.\\
+Module Line-Of-Sight Signal and module First-Order Reflection Signal require module Input Parameters to run first before they work, and cannot be verified separately. However, testings in \nameref{area2} requires these two modules working properly to provide outputs. Therefore, these two modules will be verified by \nameref{area2}.
 
 \subsection{Tests for Functional Requirements}
 
-\wss{Most of the verification will be through automated unit testing.  If
-  appropriate specific modules can be verified by a non-testing based
-  technique.  That can also be documented in this section.}
+\subsubsection{Upoint}
+\label{Point}
 
-\subsubsection{Module 1}
-
-\wss{Include a blurb here to explain why the subsections below cover the module.
-  References to the MIS would be good.  You will want tests from a black box
-  perspective and from a white box perspective.  Explain to the reader how the
-  tests were selected.}
+This section tests the functionality of Point module, including creating a point
+and reading the coordinates of a point.
 
 \begin{enumerate}
 
-\item{test-id1\\}
+\item{point-1\\}
 
-Type: \wss{Functional, Dynamic, Manual, Automatic, Static etc. Most will
-  be automatic}
+Type: manual
 					
-Initial State: 
+Initial State: none
 					
-Input: 
+Input: \\
+x = 0, y = 0;\\
+x = 3, y = 4;\\
+x = 1, y = 10;\\
+x = 3, y = 0;\\
 					
-Output: \wss{The expected result for the given inputs}
+Output: 4 points successfully created and their positions printed. Positions of the 4 points should be (0, 0), (3, 4), (1, 10), and (3, 0).\\
 
-Test Case Derivation: \wss{Justify the expected value given in the Output field}
+Test Case Derivation: A point is created with the input position.\\
 
-How test will be performed: 
-					
-\item{test-id2\\}
-
-Type: \wss{Functional, Dynamic, Manual, Automatic, Static etc. Most will
-  be automatic}
-					
-Initial State: 
-					
-Input: 
-					
-Output: \wss{The expected result for the given inputs}
-
-Test Case Derivation: \wss{Justify the expected value given in the Output field}
-
-How test will be performed: 
-
-\item{...\\}
+How test will be performed: Call function Point(x, y) 4 times with inputs listed above.
+Every time after Point() is called, run function get$\_$coordinates() and print the result
+as well as the expected result.
     
 \end{enumerate}
 
-\subsubsection{Module 2}
+\subsubsection{Uwall}
+\label{wall}
 
-...
+This section tests the functionality of Wall module, including creating a wall and finding the equation and the unit normal vector of itself.
 
-\subsection{Tests for Nonfunctional Requirements}
-
-\wss{If there is a module that needs to be independently assessed for
-  performance, those test cases can go here.  In some projects, planning for
-  nonfunctional tests of units will not be that relevant.}
-
-\wss{These tests may involve collecting performance data from previously
-  mentioned functional tests.}
-
-\subsubsection{Module ?}
-		
 \begin{enumerate}
 
-\item{test-id1\\}
+\item{wall-1\\}
 
-Type: \wss{Functional, Dynamic, Manual, Automatic, Static etc. Most will
-  be automatic}
+Type: manual
 					
-Initial State: 
+Initial State: none
 					
-Input/Condition: 
+Input: \\
+a = Point (0, 0);\\
+b = Point (1, 10);\\
+T = 0.1;\\
+R = 0.5;\\
 					
-Output/Result: 
-					
-How test will be performed: 
-					
-\item{test-id2\\}
+Output: \\
+m1 = -10;\\
+m2 = 1;\\
+k = 0;\\
+$\left[n1 , n2\right]$ = [ 0.9950, -0.0995 ] or [ -0.9950, 0.0995 ]\\
 
-Type: Functional, Dynamic, Manual, Static etc.
+Test Case Derivation: The equation and unit normal vector are calculated with models shown in SRS.\\
+
+How test will be performed: Call function Wall(a, b, T, R) and print parameters m1, m2, k, n1, and  n2 of the wall object, together with their expected values.
+
+\item{wall-2\\}
+
+Type: manual
 					
-Initial State: 
+Initial State: none
 					
-Input: 
+Input: \\
+a = Point (3, 4);\\
+b = Point (1, 10);\\
+T = 0.1;\\
+R = 0.5;\\
 					
-Output: 
+Output: \\
+m1 = 3;\\
+m2 = 1;\\
+k = 13;\\
+$\left[n1 , n2\right]$ = [0.9487, 0.3162] or [-0.9487, -0.3162]\\
+
+Test Case Derivation: The equation and unit normal vector are calculated with models shown in SRS.\\
+
+How test will be performed: Call function Wall(a, b, T, R) and print parameters m1, m2, k, n1, and  n2 of the wall object, together with their expected values.
+
+\item{wall-3\\}
+
+Type: manual
 					
-How test will be performed: 
+Initial State: none
+					
+Input: \\
+a = Point (0, 0);\\
+b = Point (3, 4);\\
+T = 0.1;\\
+R = 0.5;\\
+					
+Output: \\
+m1 = -1.3333;\\
+m2 = 1;\\
+k = 0;\\
+$\left[n1 , n2\right]$ = [0.8, -0.6] or [-0.8, 0.6]\\
+
+Test Case Derivation: The equation and unit normal vector are calculated with models shown in SRS.\\
+
+How test will be performed: Call function Wall(a, b, T, R) and print parameters m1, m2, k, n1, and  n2 of the wall object, together with their expected values.
+
+\item{wall-4\\}
+
+Type: manual
+					
+Initial State: none
+					
+Input: \\
+a = Point (3, 4);\\
+b = Point (3, 0);\\
+T = 0.1;\\
+R = 0.5;\\
+					
+Output: \\
+m1 = 1;\\
+m2 = 0;\\
+k = 3;\\
+$\left[n1 , n2\right]$ = [1, 0] or [-1, 0]\\
+
+Test Case Derivation: The equation and unit normal vector are calculated with models shown in SRS.\\
+
+How test will be performed: Call function Wall(a, b, T, R) and print parameters m1, m2, k, n1, and  n2 of the wall object, together with their expected values.
+    
+\end{enumerate}
+
+\subsubsection{Ulp}
+\label{LP}
+
+This section tests the functionality of Linear Path module, including creating a Linear Path and finding the equation and the length of itself.
+
+\begin{enumerate}
+
+\item{lp-1\\}
+
+Type: manual
+					
+Initial State: none
+					
+Input: \\
+a = Point (-2, 2);\\
+b = Point (13, 2);\\
+					
+Output: \\
+m1 = 0;\\
+m2 = 1;\\
+k = 2;\\
+length = 15\\
+
+Test Case Derivation: The equation is calculated with the linear equation model shown in SRS. The length is the Euclidean distance between the two input points.
+
+How test will be performed: Call function LinearPath(a, b) and print parameters m1, m2, k, and  length of the LinearPath object, together with their expected values.
+
+\item{lp-2\\}
+
+Type: manual
+					
+Initial State: none
+					
+Input: \\
+a = Point (-2, 2);\\
+b = Point (4, 5);\\
+					
+Output: \\
+m1 = -0.5;\\
+m2 = 1;\\
+k = 3;\\
+length = 6.7082\\
+
+Test Case Derivation: The equation is calculated with the linear equation model shown in SRS. The length is the Euclidean distance between the two input points.
+
+How test will be performed: Call function LinearPath(a, b) and print parameters m1, m2, k, and  length of the LinearPath object, together with their expected values.
+
+\item{lp-3\\}
+
+Type: manual
+					
+Initial State: none
+					
+Input: \\
+a = Point (-2, 2);\\
+b = Point (-2, 10);\\
+					
+Output: \\
+m1 = 1;\\
+m2 = 0;\\
+k = -2;\\
+length = 8\\
+
+Test Case Derivation: The equation is calculated with the linear equation model shown in SRS. The length is the Euclidean distance between the two input points.
+
+How test will be performed: Call function LinearPath(a, b) and print parameters m1, m2, k, and  length of the LinearPath object, together with their expected values.
+    
+\end{enumerate}
+
+\subsubsection{Uint}
+\label{intersection}
+
+This section tests the functionality of Intersection module in finding the position and validity of the potential intersection point of any two line segments given.
+
+\begin{enumerate}
+
+\item{inter-1\\}
+
+Type: manual
+					
+Initial State: none
+					
+Input: \\
+seg1 = output of test case wall-1 in \nameref{wall};\\
+seg2 = output of test case lp-1 in \nameref{LP};\\
+					
+Output: \\
+Intersection position = (0.2, 2.0)\\
+validity = 1\\
+
+Test Case Derivation: seg1 is a line segment from (0, 0) to (1, 10); seg2 is a line segment from (-2, 2) to (13, 2). Both of them cross the point (0.2, 2.0), therefore (0.2, 2.0) is a valid intersection of seg1 and seg2.\\
+
+How test will be performed: Call Intersection.find$\_$intersection(seg1, seg2) and print the result
+as well as the expected result. Then Call Intersection.is$\_$valid(seg1, seg2) and print the result
+as well as the expected result.
+
+\item{inter-2\\}
+
+Type: manual
+					
+Initial State: none
+					
+Input: \\
+seg1 = output of test case wall-4 in \nameref{wall};\\
+seg2 = output of test case lp-3 in \nameref{LP};\\
+					
+Output: \\
+Intersection position = (not important)\\
+validity = 0\\
+
+Test Case Derivation: seg1 is a line segment from (3, 4) to (3, 0); seg2 is a line segment from (-2, 2) to (-2, 10). seg1 and seg2 are parallel, so they do not have intersection points. Therefore the validity is 0 and the position of the potential intersection point is unessential.\\
+
+How test will be performed: Call Intersection.find$\_$intersection(seg1, seg2) and print the result
+as well as the expected result. Then Call Intersection.is$\_$valid(seg1, seg2) and print the result
+as well as the expected result.
+
+\item{inter-3\\}
+
+Type: manual
+					
+Initial State: none
+					
+Input: \\
+seg1 = output of test case wall-3 in \nameref{wall};\\
+seg2 = output of test case lp-3 in \nameref{LP};\\
+					
+Output: \\
+Intersection position = (-2, -2.667)(not important)\\
+validity = 0\\
+
+Test Case Derivation: seg1 is a line segment from (0, 0) to (3, 4); seg2 is a line segment from (-2, 2) to (-2, 10). extension lines of the two segments intersect at (-2, -2.667), but the two line segments do not cross that point. Therefore the potential intersection point is invalid.\\
+
+How test will be performed: Call Intersection.find$\_$intersection(seg1, seg2) and print the result
+as well as the expected result. Then Call Intersection.is$\_$valid(seg1, seg2) and print the result
+as well as the expected result.
+    
+\end{enumerate}
+
+\subsubsection{Ull}
+\label{ll}
+
+This section tests the functionality of Linear Path Loss module to determine the power loss of a signal along a given linear path.
+
+\begin{enumerate}
+
+\item{ll-1\\}
+
+Type: manual
+					
+Initial State: none
+					
+Input: \\
+path1 = output of test case lp-1 in \nameref{LP};\\
+frequency = $2.48\times10^9$;\\
+floor$\_$map = a FloorMap object with the following3 walls:\\
+\indent wall1 = output of test case wall-1 in \nameref{wall};\\
+\indent wall2 = output of test case wall-2 in \nameref{wall};\\
+\indent wall2 = output of test case wall-3 in \nameref{wall};\\
+					
+Output: linear path loss = $4.1185\times10^-09$.\\
+
+Test Case Derivation: The linear path loss is calculated with the Line Of Sight Signal Strength model described in SRS.\\
+
+How test will be performed: Call function LinearLoss.find$\_$linear$\_$path$\_$loss(path1, frequency, floor$\_$map) and print the result as well as the expected result.
+    
+\end{enumerate}
+
+\subsubsection{Uspec}
+\label{specular}
+
+This section tests the functionality of Specular Reflection in finding the validity and potential path of a potential first-order reflected signal.
+
+\begin{enumerate}
+
+\item{spec-1\\}
+
+Type: manual
+					
+Initial State: none
+					
+Input: \\
+wall = output of test case wall-1 in \nameref{wall};\\
+start = Point(-2, 2);\\
+end = Point(-1, 3);\\
+					
+Output: \\
+first half of the signal path (path1) = a path from Point(-2, 2) to Point(0.01884, 0.1884)\\
+first half of the signal path (path1) = a path from Point(0.01884, 0.1884) to Point(-1, 3)\\
+validity = 1\\
+
+Test Case Derivation: the reflected image of the start point (-2, 2) against the given wall is at (2.3564, 1.5644). The virtual signal path from the reflected image of the starting point to the ending point intersects the wall at Point(0.1782, 1.782), which is a valid intersection. These information implies the existence of a first-order reflected signal from Point(-2, 2) to Point(-1, 3), reflected by the input wall at Point(0.1782, 1.782). The module's task is to find such a signal.\\
+
+How test will be performed: Call Specular.get$\_$mirrored$\_$paths(wall, start, end)) and print the output as well as the expected results.
+
+\item{spec2\\}
+
+Type: manual
+					
+Initial State: none
+					
+Input: \\
+wall = output of test case wall-2 in \autoref{wall};\\
+start = Point(-2, 2);\\
+end = Point(-1, 3);\\
+					
+Output: \\
+validity = 0\\
+
+Test Case Derivation: the reflected image of the start point (-2, 2) against the given wall is at (8.2, 5.4). The virtual signal path from the reflected image of the starting point to the ending point is supposed to intersect the wall at Point(3.1, 3.7), but this is not a valid intersection. These information implies that there is no first-order reflected signals from Point(-2, 2) to Point(-1, 3).\\
+
+How test will be performed: Call Specular.get$\_$mirrored$\_$paths(wall, start, end)) and print the output as well as the expected results.
 
 \end{enumerate}
 
-\subsubsection{Module ?}
-
-...
-
+\newpage
+\begin{landscape}
 \subsection{Traceability Between Test Cases and Modules}
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+		\hline
+		& \nameref{Point} & \nameref{wall} & \nameref{LP} & \nameref{intersection} & \nameref{ll} & \nameref{specular} & \nameref{Ainput} & \nameref{Aoutput} \\
+		\hline
+		Control    			& & & & & & &X&X\\ \hline
+		Input Parameters   	& & & & & & &X& \\ \hline
+		Point     			&X& & & & & & & \\ \hline
+		Wall			 	& &X& & & & & & \\ \hline
+		Floor Map	     	& & & & & & & &X\\ \hline
+		Equation Finder	    & &X& & & & & & \\ \hline
+		Linear Signal Path	& & &X& & & & & \\ \hline
+		Intersection		& & & &X& & & & \\ \hline
+		Linear Path Loss	& & & & &X& & & \\ \hline
+		Specular Reflection & & & & & &X& & \\ \hline
+		Line-Of-Sight Signal& & & & & & & &X\\ \hline
+		First-Order Reflection Signal & & & & & & & &X\\ \hline
+		Received Signal Strength & & & & & & & &X\\ \hline
+		Output 				& & & & & & & &X\\ \hline
+		Specification Parameters & & & & & & & &X\\ \hline
+	\end{tabular}
+	\caption{Traceability Between Test Cases and Requirements}
+	\label{Table:A_trace}
+\end{table}
+\end{landscape}
 
-\wss{Provide evidence that all of the modules have been considered.}
-				
 \bibliographystyle{plainnat}
 
 \bibliography{../../refs/References}
 
 \newpage
-
-\section{Appendix}
-
-This is where you can place additional information.
-
-\subsection{Symbolic Parameters}
-
-The definition of the test cases will call for SYMBOLIC\_CONSTANTS.
-Their values are defined in this section for easy maintenance.
-
-\subsection{Usability Survey Questions?}
-
-\wss{This is a section that would be appropriate for some projects.}
 
 \end{document}
