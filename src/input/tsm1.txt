@@ -1,0 +1,3 @@
+-2, 2 # 2-D position of the transmitter
+0 # Transmission power level (dBm)
+2486000000 # Signal frequency (Hz)

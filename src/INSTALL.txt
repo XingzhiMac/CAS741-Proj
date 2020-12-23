@@ -1,1 +1,36 @@
-Instructions for installation and running of software.
+RSSC does not require installation. 
+
+To use RSSC, you can simply run RSSC.py and follow the instructions to enter your file names.
+
+You should put your input files in the "input" folder under this directory. 
+
+RSSC will generate the output file in the "output" folder under this directory.
+
+To run RSSC, you need to provide 3 text files in the input folder: a tsm file, an sp file, and a wall file. 
+You can name them whatever you like, but you should always be clear about which filename corresponding 
+to which file.
+
+For example, you can name your tsm file as "tsm.txt", sp file as "sp_1.txt", and wall file as "MywAlL.txt".
+When you use RSSC, you shall not enter "sp_1.txt" for the tsm file, otherwise unpredictable errors will occur.
+
+In the tsm file, you shall put your transmitter's 2-D location in the first line, the transmitter's power level
+in the second line, and signal frequency in the third line.
+
+You shall put the 2-D locations of your sampling points in the sp file, each line should be one location.
+
+In the wall file you are going to provide information for each and every wall in the building/simulation area.
+Each line should contain the following 6 data separated by commas: 
+- X-coordinate of the wall's first end;
+- Y-coordinate of the wall's first end;
+- X-coordinate of the wall's second end;
+- Y-coordinate of the wall's second end;
+- Transmittance of the wall;
+- Reflectance of the wall.
+
+The output file contains the estimated received signal strengths for the sampling points. In each line you may
+find a 2-D location with a number. the 2-D location is from the sampling point in your input sp file, and the number
+is the estimated received signal strength in (dBm) at that sampling point.
+
+I provided a examples for each file in the input and output folder, which may be helpful.
+
+Good luck!
